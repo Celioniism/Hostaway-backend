@@ -1,0 +1,120 @@
+<style type="text/css">
+    .word-wrap {
+        text-align: justify;
+    }
+
+    .word-wrap td {
+        word-wrap: break-word;
+    }
+
+    .CalendarBox {
+        padding-top: 25px;
+        padding-bottom: 150px;
+    }
+
+    .divisor {
+        border-right: 1px solid #eeeeef;
+    }
+
+    header,
+    .row {
+        display: flex;
+        /* aligns all child elements (flex items) in a row */
+    }
+
+    .col {
+        flex: 1;
+        /* distributes space on the line equally among items */
+    }
+
+    .table {
+        display: block;
+        max-width: -moz-fit-content;
+        max-width: fit-content;
+        margin: 0 auto;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 10px;
+    }
+
+    .piechart {
+           
+            display: block;
+            margin-left: 150%;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-image: conic-gradient(
+                rgb(243, 71, 71) 70deg, 
+                lightblue 0 235deg, 
+                orange 0);
+        }
+  
+        body,
+        .piechart {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    
+</style>
+
+<body>
+    <div class="container-xl">
+        <div class="CalendarBox">
+            <table class="table table-striped table-hover">
+                <thead class="word-wrap">
+                    <th class="divisor" scope="col">Hostaway </th>
+                    <th scope="col">Year</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </thead>
+                <tbody *ngFor="let over of Overview; let i = index">
+                    <tr class="">
+                        <th class="divisor" scope="row">{{Overview[i].year}}</th>
+                        <th>6 Most profitable Months</th>
+                        <td></td>
+                        <th> 6 Least profitable Months</th>
+                        <td></td>
+
+                    </tr>
+                    <tr class="" *ngFor="let month of Overview[i].bestMonths| slice:0:6; let j = index">
+                        <th class="divisor" scope="row">{{j+1}}</th>
+                        <td><a (click)="routeTo(month,Overview[i].year)">{{month | titlecase}}</a></td>
+                        <td>{{Overview[i].monthPrices[j] | number :'1.2-2'}}</td>
+                        <td><a (click)="routeTo(Overview[i].bestMonths[11-j],Overview[i].year)">{{Overview[i].bestMonths[11-j] | titlecase}}</a></td>
+                        <td>{{Overview[i].monthPrices[11-j] | number :'1.2-2'}}</td>
+
+
+                    </tr>
+
+                    <tr class="">
+                        <th scope="row">Totals</th>
+                        <td>Total Made in {{Overview[i].year}}</td>
+                        <td></td>
+                        <td></td>
+                        <td>{{totals[i] | number :'1.2-2'}}</td>
+
+                    </tr>
+                    
+                </tbody>
+                <tbody>
+                    <tr>
+                        <th>Total overall: </th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{Overview[0].totalProfit | number :'1.2-2'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="height:200px; width:200px">
+                <div class="piechart" id="piechart"></div>
+            </div>
+        </div>
+        
+    </div>
+    
+</body>

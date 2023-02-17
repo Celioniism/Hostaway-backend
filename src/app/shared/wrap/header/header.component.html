@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-static-top" style="padding: 5px; ">
+
+        <li>
+            <a class="Logo" routerLink="overview" style="font-size: 30px;"></a>
+        </li>
+
+        <button class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#navbar">
+            <span class="navbar-toggler-icon"></span>
+            <span class="icon-bar"></span>
+        </button>
+
+        <div class="collapse navbar-collapse bg-dark" id="navbar">
+            <ul class="nav navbar-nav mr-auto">
+
+
+                <div>
+                    <li class="nav-item"><a class="nav-link" routerLink="yearly" style="font-size: 20px; padding-right:20px; padding-left:10px">Yearly</a></li>
+                </div>
+                <div>
+                    <li class="nav-item"><a class="nav-link" (click)="del()" routerLink="monthly" style="font-size: 20px; padding-right:20px; padding-left:10px">Monthly</a></li>
+                </div>
+                <div>
+                    <li class="nav-item"><a class="nav-link" routerLink="upload" style="font-size: 20px; padding-right:20px; padding-left:10px">upload</a></li>
+                </div>
+
+
+
+
+            </ul>
+
+
+
+
+        </div>
+    </nav>
+
+    <script>
+        $("#navbarSupportedContent a:not(.dropdown-toggle)").click(function() {
+            $("#navbarSupportedContent").collapse("hide");
+            $("#navbarSupportedContent").removeClass("show");
+        });
+    </script>
+</body>
+
+</html>
