@@ -13,6 +13,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MyFilterPipe } from './pipes/my-filter';
+import { NgChartsModule } from 'ng2-charts';
+import { LocationComponent } from './pages/location/location.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ import { MyFilterPipe } from './pipes/my-filter';
     MonthlyComponent,
     UploadComponent,
     MyFilterPipe,
+    LocationComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,6 +34,7 @@ import { MyFilterPipe } from './pipes/my-filter';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
+    NgChartsModule,
   ],
   exports: [HttpClientModule],
   providers: [],

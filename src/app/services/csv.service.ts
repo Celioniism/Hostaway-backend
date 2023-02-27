@@ -16,4 +16,8 @@ export class CsvService {
     formData.append('file', file, file.name);
     return this._http.post(this.baseUrl + 'CSV', formData);
   }
+
+  getCurrent(): Observable<any> {
+    return this._http.get(this.baseUrl + 'getCurrent');
+  }
 }

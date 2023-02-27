@@ -216,3 +216,8 @@
   padding: 20px;
   text-align: center;
 }
+
+@font-face {
+  font-family: "Lobter";
+  src: url("./assets/Lobster-Regular.ttf");
+}

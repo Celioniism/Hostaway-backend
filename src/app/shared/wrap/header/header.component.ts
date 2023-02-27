@@ -8,5 +8,9 @@ import { Component } from '@angular/core';
 export class HeaderComponent {
   del() {
     localStorage.removeItem('month');
+    localStorage.removeItem('year');
+    localStorage.setItem('sortType', null);
+    localStorage.setItem('SortType', '0');
+    localStorage.setItem('change', 'false');
   }
 }

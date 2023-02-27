@@ -1,18 +1,43 @@
-<div class="text-center">
-    <input class="form-control" id="file" type="file" (change)="onChange($event)">
+<body>
+    <div class="container-xl centerparent" *ngIf="!done">
+        <div class="text-center " style="padding-top:80px;width:100%">
+            <div class="row" style="padding-top:40px; padding-bottom:40px">
+                <div class="col">
+                    <h4>Last updated: {{Current}}</h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col centerparent" style="width:100%">
+                    <input class="form-control" id="file" type="file" (change)="onChange($event)" style="width: 30%;">
+                    <div style="  padding-left:25px">
+                        <button (click)=" onUpload()" class="btn btn-success">
+                            Upload
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Flag variable is used here-->
+    <div class=" centerparent" style="padding-top:50px; padding-bottom:50px">
+        <div class="row">
+            <div class="col" *ngIf="loading">
+                <h3>Loading ...</h3>
+            </div>
 
-    <button (click)="onUpload()" class="btn btn-success">
-        Upload
-    </button>
-</div>
 
-<!-- Shareable short link of  uploaded file -->
-<div class="container text-center jumbotron" *ngIf="shortLink">
-    <h2> Visit Here</h2>
-    <a href="{{shortLink}}">{{shortLink}}</a>
-</div>
+        </div>
+        <div class="row">
+            <div class="col" *ngIf="done">
+                <h3>Done!</h3>
+                <div id="emitter"> </div>
+            </div>
+        </div>
+    </div>
 
-<!--Flag variable is used here-->
-<div class="container" *ngIf="loading">
-    <h3>Loading ...</h3>
-</div>
+
+</body>
+
+<script>
+
+</script>
