@@ -35,24 +35,29 @@ export class MonthlyComponent {
     totalProfit: 0,
     daysTaken: 0,
   };
+
   days: number;
   overview: Overview[];
   fromDb = undefined;
-  Location: any[] = this.fromDb || {};
+
   LocationPH: any[] = this.fromDb || {};
   ShownDay: DayData[] = this.fromDb || {};
   NewShownDay: DayData[] = this.fromDb || {};
   NewShownDayPH: DayData[] = this.fromDb || {};
+
   Dailies: DayDataDaily[] = this.fromDb || {};
   dayInfo: DailyInfo = this.fromDb || {};
   DailyLocs: String[][] = [[]];
   DayProfit: number[] = [];
   DayDates: String[] = [];
   Locations: any[];
+
   LocFilterForm: FormGroup;
   MonthToSelect: FormGroup;
+
   Months: string[] = this.fromDb || {};
   TheYears: number[] = [];
+
   YearToSelect: FormGroup;
   redirectName: string;
   redirectDaily: boolean;
@@ -377,7 +382,8 @@ export class MonthlyComponent {
   dailyview() {
     if (
       localStorage.getItem('SortType') == '1' ||
-      localStorage.getItem('change') == 'true'
+      localStorage.getItem('change') == 'true' ||
+      localStorage.getItem('SortType') == '2'
     ) {
       localStorage.setItem('SortType', '2');
       this.ShownDay = this.sorterService.revenue(this.ShownDay);
@@ -509,6 +515,9 @@ export class MonthlyComponent {
       profit[i] = this.dayInfo.DayProfit[positions[i]];
       dates[i] = this.dayInfo.DayDates[positions[i]];
     }
+    this.dayInfo.DailyLocs = [[]];
+    this.dayInfo.DayProfit = [];
+    this.dayInfo.DayDates = [];
     this.dayInfo.DailyLocs = locs;
     this.dayInfo.DayProfit = profit;
     this.dayInfo.DayDates = dates;

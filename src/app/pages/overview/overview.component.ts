@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Overview } from 'src/app/Entities/Overview';
 import { DataService } from 'src/app/services/data.service';
@@ -10,6 +10,7 @@ import {
   ChartEvent,
 } from 'chart.js';
 
+import * as confetti from 'canvas-confetti';
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
@@ -69,8 +70,13 @@ export class OverviewComponent {
 
   public pieChartType: ChartType = 'pie';
   public pieChartPlugins = [];
-
-  constructor(private get: DataService, private router: Router) {}
+  myScriptElement: HTMLScriptElement;
+  constructor(
+    private get: DataService,
+    private router: Router,
+    private renderer2: Renderer2,
+    private elementRef: ElementRef
+  ) {}
   ngOnInit(): void {
     this.get.getOverview().subscribe(
       (data) => {
@@ -194,5 +200,29 @@ export class OverviewComponent {
     for (let [key, value] of map.entries()) {
       if (key == searchValue) return value;
     }
+  }
+
+  public surprise(): void {
+    var canvas = document.getElementById('custom-canvas');
+
+    const myConfetti = confetti.create(canvas, {
+      resize: true,
+
+      // will fit all screen sizes
+    });
+
+    myConfetti({
+      particleCount: 290,
+      spread: 90,
+      zIndex: 0,
+      startVelocity: 30,
+      gravity: 1.6,
+      scalar: 0.9,
+      colors: ['#000000', '#F28C28', '#FFFFFF'],
+    });
+  }
+  //conf
+  confettiServe() {
+    this.surprise();
   }
 }
