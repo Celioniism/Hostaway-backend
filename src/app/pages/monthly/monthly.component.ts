@@ -103,7 +103,10 @@ export class MonthlyComponent {
     localStorage.setItem('sortType', null);
     localStorage.setItem('SortType', '0');
     localStorage.setItem('change', 'false');
-    if (localStorage.getItem('month') != null) {
+    if (
+      localStorage.getItem('month') != null &&
+      localStorage.getItem('year') != null
+    ) {
       this.specific = true;
       this.get
         .getMonthly(localStorage.getItem('month'), localStorage.getItem('year'))
@@ -366,6 +369,7 @@ export class MonthlyComponent {
       this.LocFilterForm.value.name == 'remove' ||
       this.LocFilterForm.value.name == 'select...'
     ) {
+      this.getAverages();
       this.filterargs = '';
       this.total = this.statistics.totalProfit;
     } else {
@@ -614,11 +618,13 @@ export class MonthlyComponent {
     this.Locations = this.Locations.slice(0, 0);
     this.makeLists();
     this.ShownDay = this.sorterService.revenue(this.ShownDay);
-    this.delay(10).then(() => {
+    this.delay(100).then(() => {
       if (this.ShownDay == null) {
         this.get.getMonthly(this.month, this.year).subscribe(
           (data) => {
+            console.log('in');
             this.statistics = data;
+            this.ShownDay = [];
             this.ShownDay = this.statistics.day;
             this.loaded = true;
             this.daily = false;
@@ -630,11 +636,14 @@ export class MonthlyComponent {
           () => {
             this.makeLists();
             this.pricearrows();
+            this.delay(30).then(() => {
+              console.log(this.ShownDay);
+              this.createDaily();
+              this.editDate();
+            });
           }
         );
-        this.delay(40).then(() => {
-          this.editDate();
-        });
+
         return null;
       } else {
         this.editDate();
