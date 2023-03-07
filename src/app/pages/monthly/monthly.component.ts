@@ -530,6 +530,7 @@ export class MonthlyComponent {
     this.dayInfo.DayProfit = this.DayProfit;
   }
 
+  //CHANGE VIEW BUTTONS
   dailyview() {
     if (
       localStorage.getItem('SortType') == '1' ||
@@ -565,7 +566,7 @@ export class MonthlyComponent {
           this.filterargs = '';
           this.daily = true;
           this.total = this.statistics.totalProfit;
-          this.delay(100).then(() => {
+          this.delay(30).then(() => {
             this.color();
           });
         }
@@ -581,14 +582,13 @@ export class MonthlyComponent {
       this.filterargs = '';
       this.daily = true;
       this.total = this.statistics.totalProfit;
-      this.delay(100).then(() => {
+      this.delay(20).then(() => {
         this.color();
       });
     }
     this.daily = true;
   }
 
-  //CHANGE VIEW BUTTONS
   monthly() {
     if (this.daysDow == true || this.daysUp == true) {
       this.dayInfo.DailyLocs = [[]];
@@ -607,35 +607,6 @@ export class MonthlyComponent {
     }
   }
 
-  popup(name: string) {
-    this.redirectName = name;
-    this.redirect = true;
-    this.specific = false;
-    this.daily = true;
-  }
-
-  popupday(name: string) {
-    this.redirectName = name;
-    this.redirectDaily = true;
-    this.specific = false;
-    this.daily = true;
-  }
-  hide() {
-    this.redirectName = '';
-    this.redirect = false;
-    this.specific = true;
-    this.daily = false;
-  }
-  hideday() {
-    this.redirectName = '';
-    this.redirectDaily = false;
-    this.specific = true;
-    this.daily = true;
-    this.delay(200).then(() => {
-      this.color();
-    });
-  }
-
   //SORTS BY PRICE FOR MONTHLY AND DAILY VIEW
   price(): any {
     this.DailyLocs = [[]];
@@ -643,7 +614,7 @@ export class MonthlyComponent {
     this.Locations = this.Locations.slice(0, 0);
     this.makeLists();
     this.ShownDay = this.sorterService.revenue(this.ShownDay);
-    this.delay(50).then(() => {
+    this.delay(10).then(() => {
       if (this.ShownDay == null) {
         this.get.getMonthly(this.month, this.year).subscribe(
           (data) => {
@@ -661,14 +632,15 @@ export class MonthlyComponent {
             this.pricearrows();
           }
         );
-        this.delay(160).then(() => {
+        this.delay(40).then(() => {
           this.editDate();
         });
         return null;
-      }
-      this.editDate();
+      } else {
+        this.editDate();
 
-      this.pricearrows();
+        this.pricearrows();
+      }
     });
   }
   priceDaily() {

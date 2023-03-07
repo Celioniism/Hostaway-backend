@@ -17,7 +17,7 @@ export class SorterService {
     }
     localStorage.setItem('sortType', 'name');
     this.sortTypeChange();
-    this.delay(50).then(() => {
+    this.delay(5).then(() => {
       return this.doSort(day);
     });
     return this.doSort(day);
@@ -29,7 +29,7 @@ export class SorterService {
     }
     localStorage.setItem('sortType', 'price');
     this.sortTypeChange();
-    this.delay(50).then(() => {
+    this.delay(5).then(() => {
       return this.doSort(day);
     });
     return this.doSort(day);
@@ -41,7 +41,7 @@ export class SorterService {
     }
     localStorage.setItem('sortType', 'price');
     this.sortTypeChange();
-    this.delay(50).then(() => {
+    this.delay(5).then(() => {
       return this.doSortDaily(day);
     });
     return this.doSortDaily(day);

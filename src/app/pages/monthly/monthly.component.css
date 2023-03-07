@@ -11,6 +11,9 @@ table {
 tr.sticky {
   width: "100%";
 }
+.divisor {
+  border-right: 1px solid #000000;
+}
 
 .table tr,
 th,
