@@ -63,9 +63,7 @@ export class UploadComponent {
   }
 
   public surprise(): void {
-    const canvas = this.renderer2.createElement('canvas');
-
-    this.renderer2.appendChild(this.elementRef.nativeElement, canvas);
+    var canvas = document.getElementById('custom-canvas');
 
     const myConfetti = confetti.create(canvas, {
       resize: true, // will fit all screen sizes

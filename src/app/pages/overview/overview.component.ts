@@ -9,8 +9,8 @@ import {
   ChartData,
   ChartEvent,
 } from 'chart.js';
-
 import * as confetti from 'canvas-confetti';
+
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
@@ -37,11 +37,13 @@ export class OverviewComponent {
     labels: [],
     datasets: [
       {
+        backgroundColor: 'rgb(255, 255, 255)',
+        pointBackgroundColor: 'rgb(0, 0, 0)',
         label: 'Revenue',
         data: [],
         fill: false,
-        borderColor: 'rgb(75, 192, 192)',
-        tension: 0.2,
+        borderColor: 'rgb(242, 140, 40)',
+        tension: 0.1,
       },
     ],
   };
@@ -64,6 +66,11 @@ export class OverviewComponent {
     datasets: [
       {
         data: [],
+        backgroundColor: [
+          'rgb(242, 140, 40)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)',
+        ],
       },
     ],
   };
@@ -90,6 +97,10 @@ export class OverviewComponent {
       },
       () => {}
     );
+  }
+
+  selectYear(year: String) {
+    localStorage.setItem('yearSelected', year.toString());
   }
 
   routeTo(String: string, String2) {

@@ -1,4 +1,35 @@
 .wrapped {
-  border: 1px solid black;
   word-wrap: break-word;
+}
+table {
+  border-spacing: 0px;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+tr.sticky {
+  width: "100%";
+}
+
+.table tr,
+th,
+td {
+  font-size: medium;
+}
+
+.th1 {
+  background-color: #ffe9c7;
+}
+
+tr.fixed {
+  position: fixed;
+}
+
+tr.fixed.bottom {
+  bottom: 0;
+}
+
+tr.fixed.top {
+  top: 0;
 }

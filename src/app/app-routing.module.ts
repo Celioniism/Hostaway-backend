@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LocationComponent } from './pages/location/location.component';
+
 import { MonthlyComponent } from './pages/monthly/monthly.component';
 import { OverviewComponent } from './pages/overview/overview.component';
 import { UploadComponent } from './pages/upload/upload.component';
@@ -80,7 +80,7 @@ const routes: Routes = [
   },
   { path: 'monthly', component: MonthlyComponent, title: 'Monthly Overview' },
   { path: 'yearly', component: YearlyComponent, title: 'Yearly Overview' },
-  { path: 'location', component: LocationComponent, title: 'Location' },
+
   { path: 'upload', component: UploadComponent, title: 'Upload CSV' },
 ];
 

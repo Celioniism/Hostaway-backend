@@ -1,17 +1,16 @@
 import { Reservation } from './Reservation';
 
 export class DayData {
-  constructor(){
+  constructor() {
     this.date = null;
     this.reservation = null;
-    this.locationName =  null;
+    this.locationName = null;
     this.priceForDay = 0;
-      }
-    
-   
+  }
 
   locationName: string;
   reservation: Reservation;
   date: Date;
+  name: string;
   priceForDay: number;
 }

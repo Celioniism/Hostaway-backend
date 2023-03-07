@@ -14,7 +14,6 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MyFilterPipe } from './pipes/my-filter';
 import { NgChartsModule } from 'ng2-charts';
-import { LocationComponent } from './pages/location/location.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +25,6 @@ import { LocationComponent } from './pages/location/location.component';
     MonthlyComponent,
     UploadComponent,
     MyFilterPipe,
-    LocationComponent,
   ],
   imports: [
     BrowserModule,
