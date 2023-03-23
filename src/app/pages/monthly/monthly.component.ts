@@ -18,6 +18,35 @@ export class MonthlyComponent {
   SortType: number = 0;
   sortType: string;
 
+  private dataStorage: string = null;
+  private retrieveDataResolver;
+  ////////////////////////////////
+  // IMPLEMENT EVENT LINKING WITH PROMISE:
+
+  // displayData(): void {
+  //   // your display code goes here
+  //   console.log("2. DISPLAYING DATA", this.dataStorage);
+  // }
+  // retrieveData(): void {
+  //   // your async retrieval data logic goes here
+  //   console.log("1. GETTING DATA FROM SERVER");
+  //   setTimeout(() => { // <--- Change it - your service data retrieval
+  //     this.dataStorage = '++DATA++';
+  //     this.retrieveDataResolver(); // <--- This must be called as soon as the data are ready to be displayed
+  //   }, 1000);
+  // }
+
+  // retrieveDataPromise(): Promise<any> {
+  //   return new Promise((resolve) => {
+  //     this.retrieveDataResolver = resolve;
+  //     this.retrieveData();
+  //   })
+  // }
+  // retrieveAndThenDisplay() {
+  //   this.retrieveDataPromise().then(() => {this.displayData()});
+  // }
+
+  ////////////////////////////////
   weekday: string[] = [];
 
   daysUp: boolean = false;
@@ -40,6 +69,7 @@ export class MonthlyComponent {
   loaded: boolean = false;
   daily: boolean = false;
   statistics: Monthly = {
+    reservationId: [],
     day: [],
     totalProfit: 0,
     daysTaken: 0,
@@ -72,6 +102,7 @@ export class MonthlyComponent {
   redirectName: string;
   redirectDaily: boolean;
   selecter: boolean = false;
+  LocDays: number;
   constructor(
     private get: DataService,
     private fb: FormBuilder,
@@ -113,12 +144,14 @@ export class MonthlyComponent {
         .subscribe(
           (data) => {
             this.statistics = data;
-            this.ShownDay = this.statistics.day;
+            this.ShownDay = JSON.parse(JSON.stringify(this.statistics.day));
+
             this.days = this.uniqueDates(this.ShownDay);
             this.totaldays = this.getDays(
               localStorage.getItem('month'),
               localStorage.getItem('year')
             );
+            this.LocDays = this.days;
             this.loaded = true;
             this.daily = false;
             this.total = this.statistics.totalProfit;
@@ -131,6 +164,7 @@ export class MonthlyComponent {
                 this.selecter = true;
                 this.overview = data;
                 this.Months = data[0].bestMonths;
+                this.sortMonth(this.Months);
                 for (let i = 0; i < data.length; i++) {
                   this.TheYears[i] = data[i].year;
                 }
@@ -151,7 +185,8 @@ export class MonthlyComponent {
       this.get.getOverview().subscribe(
         (data) => {
           this.overview = data;
-          this.Months = data[0].bestMonths;
+          this.Months = [];
+
           for (let i = 0; i < data.length; i++) {
             this.TheYears[i] = data[i].year;
           }
@@ -178,12 +213,31 @@ export class MonthlyComponent {
       for (let i = 0; i < this.overview.length; i++) {
         if (this.overview[i].year == year) {
           this.Months = this.overview[i].bestMonths;
+          this.sortMonth(this.Months);
         }
       }
     } else {
       console.log('Please select');
       this.Months = null;
     }
+  }
+
+  sortMonth(Month: string[]) {
+    var positions: number[] = [];
+    for (var i = 0; i < this.Months.length; i++) {
+      positions[i] = this.getMonthFromCapString(Month[i]);
+    }
+    var month: string[] = [];
+
+    for (var i = 0; i < positions.length; i++) {
+      month[positions[i]] = this.Months[i];
+    }
+    month = month.filter(function (e) {
+      return e;
+    });
+
+    this.Months = [];
+    this.Months = month;
   }
 
   selected() {
@@ -219,7 +273,7 @@ export class MonthlyComponent {
               this.filterargs = '';
               this.DailyLocs = [[]];
               this.statistics = data;
-              this.ShownDay = this.statistics.day;
+              this.ShownDay = JSON.parse(JSON.stringify(this.statistics.day));
               this.makeLists();
               this.total = this.statistics.totalProfit;
 
@@ -229,6 +283,8 @@ export class MonthlyComponent {
                 this.MonthToSelect.value.month,
                 this.YearToSelect.value.year
               );
+              this.LocDays = this.days;
+
               this.createDaily();
               this.editDate();
             },
@@ -248,13 +304,32 @@ export class MonthlyComponent {
     }
   }
 
-  //SPECIFIC FUNCTIONS
+  //Time FUNCTIONS
 
   delay(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
   }
 
   //DICTIONARY SORTS AND COMPUTATIONS
+
+  getMonthFromCapString(mon) {
+    var months = [
+      'JANUARY',
+      'FEBRUARY',
+      'MARCH',
+      'APRIL',
+      'MAY',
+      'JUNE',
+      'JULY',
+      'AUGUST',
+      'SEPTEMBER',
+      'OCTOBER',
+      'NOVEMBER',
+      'DECEMBER',
+    ];
+
+    return months.indexOf(mon);
+  }
 
   getMonthFromString(mon) {
     var months = [
@@ -294,20 +369,20 @@ export class MonthlyComponent {
   }
 
   ColorDict: Map<string, string> = new Map<string, string>([
-    [' Creek Side Inn | ', '#CEA477'],
-    [' Paynes Cove | ', '#8ABC8F'],
-    [' Athens Heritage House - 100+ years old Remodeled house | ', '#5C7E71'],
-    [' Broad Bungalow | ', '#2E4052'],
-    [' Bobbin Mills Studio | ', '#5B6989'],
-    [' Five Points Mill House | ', '#8891BF'],
-    [' Athens Mid-Century Inn | ', '#CABAC8'],
-    [' The Harmony Inn | ', '#5A3399'],
-    [' Classic City Apartment | ', '#435274'],
-    [' Cardinal Rose Lakehouse | ', '#A7958B'],
-    [' Lakefront with Dock and Hot Tub | ', '#189DA0'],
-    [' The Nunn Cottage | ', '#A16869'],
-    [' Eclectic Inn Downtown | ', '#B38A75'],
-    [' Lakefront Manor | ', '#C5AC81'],
+    ['Creek Side Inn', '#CEA477'],
+    ['Paynes Cove', '#8ABC8F'],
+    ['Athens Heritage House - 100+ years old Remodeled house', '#5C7E71'],
+    ['Broad Bungalow', '#2E4052'],
+    ['Bobbin Mills Studio', '#5B6989'],
+    ['Five Points Mill House', '#8891BF'],
+    ['Athens Mid-Century Inn', '#CABAC8'],
+    ['The Harmony Inn', '#5A3399'],
+    ['Classic City Apartment', '#435274'],
+    ['Cardinal Rose Lakehouse', '#A7958B'],
+    ['Lakefront with Dock and Hot Tub', '#189DA0'],
+    ['The Nunn Cottage', '#A16869'],
+    ['Eclectic Inn Downtown', '#B38A75'],
+    ['Lakefront Manor', '#C5AC81'],
   ]);
 
   // FORMATTING AND COLORATION
@@ -354,13 +429,17 @@ export class MonthlyComponent {
     }
     return out;
   }
+
   getLocTotal(name: string) {
     var total = 0;
+    var count = 0;
     for (let i = 0; i < this.ShownDay.length; i++) {
       if (name == this.ShownDay[i].locationName) {
         total += this.ShownDay[i].priceForDay;
+        count++;
       }
     }
+    this.LocDays = count;
     this.total = total;
   }
 
@@ -371,6 +450,7 @@ export class MonthlyComponent {
     ) {
       this.getAverages();
       this.filterargs = '';
+      this.LocDays = this.days;
       this.total = this.statistics.totalProfit;
     } else {
       this.filterargs = this.LocFilterForm.value.name;
@@ -401,9 +481,14 @@ export class MonthlyComponent {
   }
 
   getDays(month, year): number {
-    var numMonth = this.getMonthFromString(month);
+    var numMonth = this.getMonthFromString(month) + 1;
+    if (month == 'February' && year % 4 != 0) {
+      return 28;
+    } else if (month == 'February' && year % 4 == 0) {
+      return 29;
+    }
 
-    return new Date(year, numMonth, 0).getDate() + 1;
+    return new Date(year, numMonth, 0).getDate();
   }
 
   //REDIRECTION
@@ -440,7 +525,7 @@ export class MonthlyComponent {
       revpar += this.ShownDay[i].priceForDay / this.days;
     }
     this.RevenueAverage = revenue / this.ShownDay.length;
-    this.REVPARAverage = revpar / this.days;
+    this.REVPARAverage = revpar / this.LocDays;
   }
   getLocAverages(name: string) {
     var revenue = 0;
@@ -453,6 +538,7 @@ export class MonthlyComponent {
         revpar += this.ShownDay[i].priceForDay / this.days;
       }
     }
+
     this.RevenueAverage = revenue / count;
     this.REVPARAverage = revpar / count;
   }
@@ -461,6 +547,7 @@ export class MonthlyComponent {
       this.LocationPH[i] = this.statistics.day[i].locationName;
     }
     this.Locations = this.uniq_fast(this.LocationPH);
+    this.Locations.sort();
   }
   createDaily() {
     this.inits2(this.uniqueDates(this.ShownDay));
@@ -543,38 +630,26 @@ export class MonthlyComponent {
     ) {
       localStorage.setItem('SortType', '2');
 
-      this.statistics = {
-        day: [],
-        totalProfit: 0,
-        daysTaken: 0,
-      };
       this.ShownDay = this.sorterService.revenue(this.ShownDay);
-      this.get.getMonthly(this.month, this.year).subscribe(
-        (data) => {
-          this.dayInfo.DailyLocs = [];
-          this.dayInfo.DayDates = [];
-          this.dayInfo.DayProfit = [];
-          this.statistics = data;
-          this.ShownDay = this.statistics.day;
-          this.loaded = true;
-          this.daily = false;
-          if (this.filterargs == '') {
-            this.total = this.statistics.totalProfit;
-          }
-          this.createDaily();
-        },
-        (error) => {},
-        () => {
-          this.makeLists();
-          this.pricearrows();
-          this.filterargs = '';
-          this.daily = true;
-          this.total = this.statistics.totalProfit;
-          this.delay(30).then(() => {
-            this.color();
-          });
-        }
-      );
+
+      this.dayInfo.DailyLocs = [];
+      this.dayInfo.DayDates = [];
+      this.dayInfo.DayProfit = [];
+      this.ShownDay = JSON.parse(JSON.stringify(this.statistics.day));
+      this.loaded = true;
+      this.daily = false;
+      if (this.filterargs == '') {
+        this.total = this.statistics.totalProfit;
+      }
+      this.createDaily();
+      this.makeLists();
+      this.pricearrows();
+      this.filterargs = '';
+      this.daily = true;
+      this.total = this.statistics.totalProfit;
+      this.delay(30).then(() => {
+        this.color();
+      });
     } else {
       this.DailyLocs = [];
       this.DayDates = [];
@@ -618,32 +693,21 @@ export class MonthlyComponent {
     this.Locations = this.Locations.slice(0, 0);
     this.makeLists();
     this.ShownDay = this.sorterService.revenue(this.ShownDay);
-    this.delay(100).then(() => {
+    this.delay(30).then(() => {
       if (this.ShownDay == null) {
-        this.get.getMonthly(this.month, this.year).subscribe(
-          (data) => {
-            console.log('in');
-            this.statistics = data;
-            this.ShownDay = [];
-            this.ShownDay = this.statistics.day;
-            this.loaded = true;
-            this.daily = false;
-            if (this.filterargs == '') {
-              this.total = this.statistics.totalProfit;
-            }
-          },
-          (error) => {},
-          () => {
-            this.makeLists();
-            this.pricearrows();
-            this.delay(30).then(() => {
-              console.log(this.ShownDay);
-              this.createDaily();
-              this.editDate();
-            });
-          }
-        );
-
+        this.ShownDay = [];
+        this.ShownDay = JSON.parse(JSON.stringify(this.statistics.day));
+        this.loaded = true;
+        this.daily = false;
+        if (this.filterargs == '') {
+          this.total = this.statistics.totalProfit;
+        }
+        this.makeLists();
+        this.pricearrows();
+        this.delay(30).then(() => {
+          this.createDaily();
+          this.editDate();
+        });
         return null;
       } else {
         this.editDate();
@@ -652,6 +716,35 @@ export class MonthlyComponent {
       }
     });
   }
+
+  printData1() {
+    var divToPrint = document.getElementById('printTable1');
+    var divToPrint2 = document.getElementById('printTable3');
+    const newWin = window.open('Printout');
+    newWin.document.write(divToPrint.outerHTML);
+    newWin.document.write(divToPrint2.outerHTML);
+    var head = newWin.document.getElementsByTagName('head')[0];
+
+    var title = newWin.document.createElement('title');
+    title.text = 'Monthly Print-out';
+    head.append(title);
+
+    newWin.print();
+    this.delay(50).then(() => {
+      newWin.close();
+    });
+  }
+
+  printData2() {
+    var divToPrint = document.getElementById('printTable2');
+    const newWin = window.open('Printout');
+    newWin.document.write(divToPrint.outerHTML);
+    newWin.print();
+    this.delay(50).then(() => {
+      newWin.close();
+    });
+  }
+
   priceDaily() {
     let positions = [];
     let locs: String[][] = [[]];

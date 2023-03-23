@@ -1,15 +1,18 @@
-<body style="height:840px">
+<body style="height:580px" style="caret-color: transparent;">
+
     <div style="z-index:2">
         <div class="container-xl centerparent" *ngIf="!done">
-            <div class="text-center " style="padding-top:80px;width:100%">
+            <div class="text-center unselectable" style="padding-top:80px;width:100%">
+
                 <div class="row" style="padding-top:40px; padding-bottom:40px">
                     <div class="col">
                         <h4>Last updated: {{Current}}</h4>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col centerparent" style="width:100%">
-                        <input class="form-control" id="file" type="file" (change)="onChange($event)" style="width: 30%;">
+                        <input class="form-control" id="file" type="file" accept=".csv" (change)="onChange($event)" style="width: 30%;">
                         <div style="  padding-left:25px">
                             <button (click)=" onUpload()" class="btn btn-success">
                                 Upload
@@ -17,16 +20,16 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
+
         <!--Flag variable is used here   -->
         <div class=" centerparent" style="padding-top:50px; padding-bottom:50px">
             <div class="row">
                 <div class="col" *ngIf="loading">
                     <h3 style="display:inline">Loading</h3><img style="width:40px;height:40px; display:inline; transform:translateY(-8px)" src="/assets/images/loading.gif">
                 </div>
-
-
             </div>
             <div class="row">
                 <div class="col" *ngIf="done">
@@ -34,10 +37,11 @@
                 </div>
             </div>
         </div>
+
     </div>
-    <div style="transform:translateZ(-1)"><canvas id="custom-canvas" style="transform:translate(0%,-18%); height: 600px"></canvas></div>
+
+    <div style="transform:translateZ(-1)">
+        <canvas id="custom-canvas" style="transform:translate(0%,-18%); height: 500px"></canvas>
+    </div>
+
 </body>
-
-<script>
-
-</script>

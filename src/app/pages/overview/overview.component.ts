@@ -23,6 +23,7 @@ export class OverviewComponent {
   Channel: Map<String, number> = new Map<String, number>();
   MonthCount: number = 0;
 
+  //various options for line and piechart
   public lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     plugins: {
@@ -69,7 +70,10 @@ export class OverviewComponent {
         backgroundColor: [
           'rgb(242, 140, 40)',
           'rgb(54, 162, 235)',
-          'rgb(255, 205, 86)',
+          'rgb(225, 105, 86)',
+          'rgb(255, 145, 186)',
+          'rgb(255, 235, 56)',
+          'rgb(55, 105, 206)',
         ],
       },
     ],
@@ -77,13 +81,14 @@ export class OverviewComponent {
 
   public pieChartType: ChartType = 'pie';
   public pieChartPlugins = [];
-  myScriptElement: HTMLScriptElement;
+
   constructor(
     private get: DataService,
     private router: Router,
     private renderer2: Renderer2,
     private elementRef: ElementRef
   ) {}
+
   ngOnInit(): void {
     this.get.getOverview().subscribe(
       (data) => {
@@ -98,15 +103,22 @@ export class OverviewComponent {
       () => {}
     );
   }
-
+  //titlecase script
+  toTitleCase(str) {
+    return str.replace(/\w\S*/g, function (txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  }
+  //UNIMPLEMENTED route from overview to yearly
   selectYear(year: String) {
     localStorage.setItem('yearSelected', year.toString());
   }
 
   routeTo(String: string, String2) {
-    this.router.navigate(['monthly/' + String]);
+    String = this.toTitleCase(String);
     localStorage.setItem('month', String);
     localStorage.setItem('year', String2);
+    this.router.navigate(['monthly/' + String]);
   }
 
   calcTotals() {
@@ -115,46 +127,77 @@ export class OverviewComponent {
       for (let j = 0; j < this.Overview[i].bestMonths.length; j++) {
         total += this.Overview[i].monthPrices[j];
       }
-
       this.totals[i] = total;
     }
   }
   piechartCreate() {
     var totalValues = [];
-    var allKeys = ['', '', ''];
-
+    var allKeys = [];
+    var TotalMap = new Map<string, number>();
     for (let i = 0; i < this.Overview.length; i++) {
       this.Channel = this.Overview[i].channelTotals;
-
-      var values = Object.values(this.Channel);
-      var keys = Object.keys(this.Channel);
-      if (i == 0) {
-        totalValues[0] = 0;
-        totalValues[1] = values[0];
-        totalValues[2] = 0;
-      } else {
-        totalValues[0] += values[0];
-        totalValues[1] += values[1];
-        totalValues[2] += values[2];
-
-        allKeys[0] = keys[0];
-        allKeys[1] = keys[1];
-        allKeys[2] = keys[2];
+      var values: number[] = Object.values(this.Channel);
+      var keys: string[] = Object.keys(this.Channel);
+      for (let j = 0; j < keys.length; j++) {
+        if (i == 0) {
+          if (TotalMap.get(keys[j]) != null) {
+            TotalMap.set(keys[j], values[j] + TotalMap.get(keys[j]));
+          } else {
+            TotalMap.set(keys[j], values[j]);
+          }
+          totalValues[1] = values[0];
+        } else if (totalValues[j] != null) {
+          if (TotalMap.get(keys[j]) != null) {
+            TotalMap.set(keys[j], values[j] + TotalMap.get(keys[j]));
+          } else {
+            TotalMap.set(keys[j], values[j]);
+          }
+          totalValues[j] += values[j];
+        } else {
+          if (TotalMap.get(keys[j]) != null) {
+            TotalMap.set(keys[j], values[j] + TotalMap.get(keys[j]));
+          } else {
+            TotalMap.set(keys[j], values[j]);
+          }
+          totalValues[j] = values[j];
+        }
       }
     }
-    var total = totalValues[0] + totalValues[1] + totalValues[2];
+    totalValues = [];
+    allKeys = [];
+    totalValues = Array.from(TotalMap.values());
+    allKeys = Array.from(totalValues.keys());
+
+    totalValues.sort(function (a, b) {
+      return a - b;
+    });
     var percents: number[] = [];
-    for (let i = 0; i < this.Overview.length; i++) {
-      percents[i] = (totalValues[i] / total) * 100;
+    var positions = [];
+    var SortKeys: string[] = [];
+    var total = 0;
+
+    for (var i = 0; i < totalValues.length; i++) {
+      total += totalValues[i];
+      positions[i] = this.getByValue2(TotalMap, totalValues[i]);
+      TotalMap.delete(positions[i]);
     }
 
-    for (let i = 0; i < this.Overview.length; i++) {
-      this.Labels[i] = allKeys[i];
+    for (let i = 0; i < allKeys.length; i++) {
+      percents[i] = (totalValues[i] / total) * 100;
+      SortKeys[i] = positions[i];
+    }
+
+    for (let i = 0; i < SortKeys.length; i++) {
+      this.Labels[i] = SortKeys[i];
       this.pieChartData.datasets[0].data.push(totalValues[i]);
       this.pieChartData.labels.push(
-        allKeys[i] + ' - ' + percents[i].toFixed(2) + '%'
+        SortKeys[i] + ' - ' + percents[i].toFixed(2) + '%'
       );
     }
+  }
+
+  delay(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
   }
 
   linechartCreate() {
@@ -168,6 +211,7 @@ export class OverviewComponent {
           this.Overview[i].monthPrices[j]
         );
       }
+
       var sorted = new Map<string, number>(
         [...map.entries()].sort((a, b) => {
           const first = a;
@@ -207,9 +251,14 @@ export class OverviewComponent {
   }
 
   getByValue(map: Map<String, number>, searchValue: String): number {
-    console.log(map.values);
     for (let [key, value] of map.entries()) {
       if (key == searchValue) return value;
+    }
+  }
+
+  getByValue2(map, searchValue) {
+    for (let [key, value] of map.entries()) {
+      if (value === searchValue) return key;
     }
   }
 
@@ -218,7 +267,6 @@ export class OverviewComponent {
 
     const myConfetti = confetti.create(canvas, {
       resize: true,
-
       // will fit all screen sizes
     });
 

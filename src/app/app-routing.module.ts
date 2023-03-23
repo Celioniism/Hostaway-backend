@@ -17,62 +17,62 @@ const routes: Routes = [
         title: 'General Overview',
       },
       {
-        path: 'monthly/JANUARY',
+        path: 'monthly/January',
         component: MonthlyComponent,
         title: 'January Overview',
       },
       {
-        path: 'monthly/FEBRUARY',
+        path: 'monthly/February',
         component: MonthlyComponent,
         title: 'February Overview',
       },
       {
-        path: 'monthly/MARCH',
+        path: 'monthly/March',
         component: MonthlyComponent,
         title: 'March Overview',
       },
       {
-        path: 'monthly/APRIL',
+        path: 'monthly/April',
         component: MonthlyComponent,
         title: 'April Overview',
       },
       {
-        path: 'monthly/MAY',
+        path: 'monthly/May',
         component: MonthlyComponent,
         title: 'May Overview',
       },
       {
-        path: 'monthly/JUNE',
+        path: 'monthly/June',
         component: MonthlyComponent,
         title: 'June Overview',
       },
       {
-        path: 'monthly/JULY',
+        path: 'monthly/July',
         component: MonthlyComponent,
         title: 'July Overview',
       },
       {
-        path: 'monthly/AUGUST',
+        path: 'monthly/August',
         component: MonthlyComponent,
         title: 'August Overview',
       },
       {
-        path: 'monthly/SEPTEMBER',
+        path: 'monthly/September',
         component: MonthlyComponent,
         title: 'September Overview',
       },
       {
-        path: 'monthly/OCTOBER',
+        path: 'monthly/October',
         component: MonthlyComponent,
         title: 'October Overview',
       },
       {
-        path: 'monthly/NOVEMBER',
+        path: 'monthly/November',
         component: MonthlyComponent,
         title: 'November Overview',
       },
       {
-        path: 'monthly/DECEMBER',
+        path: 'monthly/December',
         component: MonthlyComponent,
         title: 'December Overview',
       },
@@ -80,7 +80,6 @@ const routes: Routes = [
   },
   { path: 'monthly', component: MonthlyComponent, title: 'Monthly Overview' },
   { path: 'yearly', component: YearlyComponent, title: 'Yearly Overview' },
-
   { path: 'upload', component: UploadComponent, title: 'Upload CSV' },
 ];
 

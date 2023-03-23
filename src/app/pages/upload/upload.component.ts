@@ -19,13 +19,18 @@ export class UploadComponent {
   file: File;
   loading: boolean;
   done: boolean = false;
+  pupMade: boolean = false;
+  message: string = '';
   public clicked = false;
   ngOnInit(): void {
     this.fileUploadService.getCurrent().subscribe(
-      (response) => {},
+      (response) => {
+        this.Current = response;
+      },
       (error) => {
         this.Current = error.error.text;
         console.log(error.error.text);
+        console.log(error);
       }
     );
   }
@@ -41,12 +46,6 @@ export class UploadComponent {
     console.log(this.file);
     var filePath = this.file.type;
     console.log(filePath);
-
-    if (filePath != 'text/csv') {
-      alert('Invalid file type');
-      this.file = null;
-      return false;
-    }
 
     this.fileUploadService.upload(this.file).subscribe(
       (response) => {},
@@ -70,7 +69,10 @@ export class UploadComponent {
     });
 
     myConfetti({ particleCount: 100, spread: 160 });
-
+    this.fileUploadService.createPupReport().subscribe((response) => {
+      this.message = response;
+      this.pupMade = true;
+    });
     this.clicked = true;
   }
   //conf

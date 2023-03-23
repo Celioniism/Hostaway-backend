@@ -1,1 +1,150 @@
-<p>yearly works!</p>
+<body style="caret-color: transparent;">
+
+    <!-- YEAR AND MONTH SELECTOR. USING FORM GROUPS -->
+    <div class="container-xl" style="padding-top:15px;">
+        <div class="row">
+            <div style="max-width:390px ; margin-left:0%; display:inline">
+                <div class="card" style="max-width:390px">
+                    <div class="card-body row">
+
+                        <form class=" col" [formGroup]="YearToSelect">
+                            <h4 style="white-space: nowrap">Select a Year</h4>
+                            <div class="form-group" style="padding-top: 20px; padding-bottom:10px;">
+                                <div class="">
+                                    <!-- SEARCHYEAR() FUNCTION LOOKS THROUGH EACH OVERVIEW AND DISPLAYS THE POPULATED MONTHS FOR EACH YEAR.   -->
+                                    <select class="" formControlName="year" style="height:35px; width:100%" required id="year" (change)="searchyear()">
+                                        <option selected>{{select}}</option>
+                                        <option *ngFor="let year of TheYears">{{year}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+
+                        <form class="col" [formGroup]="locToSelect">
+                            <h4 style="white-space: nowrap">Select a Listing</h4>
+                            <div class="form-group" style="padding-top: 20px; padding-bottom:10px">
+                                <div class="section">
+                                    <select class="section" formControlName="location" style="height:35px;width:100%" required id="month">
+                                        <option selected>select...</option>
+                                        <option class="section" *ngFor="let loc1 of Locations">{{loc1}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- SELECTED TAKES BOTH FORMGROUP VALUES AND CALLS API TO RETRIEVE MONTHLY OVERVIEW DATA. -->
+                        <a class="btn btn-outline-primary" (click)="selected()">Select</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IF ANY OF THE TWO UPPER FORM GROUPS ARE EMPTY THIS TEXT WILL APPEAR. -->
+            <div class="col" *ngIf="!selector" style="margin-left:10%; margin-top:5%">
+                <th>
+                    <h3>Please Select A Year And Listing</h3>
+                </th>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-xl">
+        <div class="CalendarBox" style="margin-top:.5rem; margin-bottom:1rem">
+            <!-- IF DAILY VIEW IS TRUE DISPLAY THIS TABLE SET. -->
+
+            <!-- IF A SPECIFIC MONTH AND YEAR HAVE BEEN SELECTED DISPLAY DATA -->
+            <div class="card">
+                <div class="card-body row">
+
+                    <div class="row">
+                        <div class="col-2">
+                            <a class="btn btn-outline-primary" (click)="printData1()">Print Report</a>
+                        </div>
+                        <!-- CHECKS TO SEE IF FILTER IS USED. DISPLAYS LOCATION UP TOP FOR EASY IDENTIFICATION -->
+                        <div class="col" style="min-width:300px">
+                            <a style="font-size:larger; font-weight:bold"> Listing: {{location === '' ? "none selected" : ""}}{{location}} </a>
+                        </div>
+                    </div>
+
+                    <table class="table table-striped table-hover" style="padding-bottom:0px" id="printTable2">
+
+                        <tbody>
+                            <tr>
+                                <th>Booked Status</th>
+                                <th style="width:21%"> {{location === undefined ? "none selected" : year +" - "+ location}} </th>
+                                <th style="width:22%">Reservation ID</th>
+                                <th>Channel</th>
+                                <th>Rooms sold</th>
+                                <th>Occupancy</th>
+                                <th>ADR</th>
+                                <th style="width:12%">Revenue</th>
+                                <th>RevPAR</th>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="section" *ngIf="selector" id="box" style="height:500px;max-height: 500px; overflow-y:auto;">
+                        <table class="table table-striped table-hover" style="padding-top:0px" id="printTable1">
+                            <thead class="word-wrap">
+                                <th style="font-size:small">CGportfolio</th>
+
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <th></th>
+                                    <th>Date and day</th>
+                                    <th>Reservation ID</th>
+                                    <th>Channel</th>
+                                    <th>Rooms sold</th>
+                                    <th>Occupancy</th>
+                                    <th>ADR</th>
+                                    <th>Revenue</th>
+                                    <th>RevPAR</th>
+                                </tr>
+                                <tr class="" *ngFor="let day of numdays; let i = index ">
+                                    <td>{{ShownDay[i].reservation.reservationId === 0 ? "🔴" : "🟢"}}</td>
+                                    <td class="divisor">{{ShownDay[i].date}} | {{ShownDay[i].name}}</td>
+                                    <th scope="row">{{ShownDay[i].reservation.reservationId === 0 ? "" : "Reservation ID:"}}{{ShownDay[i].reservation.reservationId === 0 ? "" : ShownDay[i].reservation.reservationId}}</th>
+                                    <td>{{ShownDay[i].reservation.reservationId === 0 ? "" : ShownDay[i].reservation.locationName.channel}}</td>
+                                    <td>{{ShownDay[i].reservation.reservationId === 0 ? "0/1" : "1/1"}}</td>
+                                    <td>{{ShownDay[i].reservation.reservationId === 0 ? "0%" : "100%"}}</td>
+                                    <td>{{ShownDay[i].priceForDay/1 | number :'1.2-2'}}</td>
+                                    <td>${{ShownDay[i].priceForDay | number :'1.2-2'}} </td>
+                                    <td>${{ShownDay[i].priceForDay/1 | number :'1.2-2'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="overflow-x:auto">
+                        <table class="table table-striped table-hover" id="printTable3">
+                            <tbody>
+                                <tr>
+                                    <th>Totals</th>
+                                    <th style="width:40%"></th>
+                                    <th>Rooms Sold</th>
+                                    <th>Occupancy</th>
+                                    <th>ADR</th>
+                                    <th>Revenue</th>
+                                    <th>RevPAR</th>
+                                </tr>
+                                <tr class="wrapped">
+                                    <th></th>
+                                    <th style="width:48%"></th>
+                                    <th class="wrapped">{{LocDays === undefined ? "" :  LocDays +"/  "+ 365}}</th>
+                                    <th class="wrapped">{{LocDays === undefined ? "" : (LocDays/365)*100 | number :'1.2-2'}}{{LocDays === undefined ? "" : "%"}}</th>
+                                    <th class="wrapped">${{total/LocDays | number :'1.2-2'}} </th>
+                                    <th class="wrapped">${{total | number :'1.2-2'}} </th>
+                                    <th class="wrapped">${{total/365 | number :'1.2-2'}}
+                                    </th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>

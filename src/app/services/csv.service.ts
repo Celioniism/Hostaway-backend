@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class CsvService {
-  private baseUrl = 'http://localhost:8080/HostawayApi/';
+  private baseUrl = 'http://localhost:5000/HostawayApi/';
+  //'hostaway.us-east-1.elasticbeanstalk.com     localhost:5000';
   constructor(private _http: HttpClient) {}
 
   upload(file: File): Observable<any> {
@@ -19,5 +20,9 @@ export class CsvService {
 
   getCurrent(): Observable<any> {
     return this._http.get(this.baseUrl + 'getCurrent');
+  }
+
+  createPupReport(): Observable<any> {
+    return this._http.get(this.baseUrl + 'createPickup');
   }
 }

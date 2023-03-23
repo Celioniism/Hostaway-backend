@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './shared/wrap/header/header.component';
@@ -14,6 +13,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MyFilterPipe } from './pipes/my-filter';
 import { NgChartsModule } from 'ng2-charts';
+import { PickupsComponent } from './pages/pickups/pickups.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +25,7 @@ import { NgChartsModule } from 'ng2-charts';
     MonthlyComponent,
     UploadComponent,
     MyFilterPipe,
+    PickupsComponent,
   ],
   imports: [
     BrowserModule,

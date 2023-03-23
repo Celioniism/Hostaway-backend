@@ -1,49 +1,48 @@
-<body>
+<body style="caret-color: transparent;">
 
     <!-- YEAR AND MONTH SELECTOR. USING FORM GROUPS -->
-    <div *ngIf="specific" class="container-xl" style="padding-top:15px;">
+    <div *ngIf="specific" class="container-xl" style="padding-top:15px;caret-color: transparent;">
         <div class="row">
-            <div style="width:390px ; margin-left:0%; display:inline">
-                <div class="card" style="width:390px">
+
+            <div style="max-width:390px ; margin-left:0%; display:inline">
+                <div class="card" style="max-width:390px">
                     <div class="card-body row">
+
                         <form class=" col" [formGroup]="YearToSelect">
-                            <h4>Select a Year</h4>
+                            <h4 class="unselectable" style="white-space: nowrap;">Select a Year</h4>
                             <div class="form-group" style="padding-top: 20px; padding-bottom:10px;">
                                 <div class="">
                                     <!-- SEARCHYEAR() FUNCTION LOOKS THROUGH EACH OVERVIEW AND DISPLAYS THE POPULATED MONTHS FOR EACH YEAR.   -->
                                     <select class="" formControlName="year" style="height:35px; width:100%" required id="year" (change)="searchyear()">
                                         <option selected>{{select}}</option>
                                         <option *ngFor="let year of TheYears">{{year}}</option>
-
                                     </select>
                                 </div>
-
                             </div>
                         </form>
+
                         <form class=" col" [formGroup]="MonthToSelect">
-                            <h4>Select a Month</h4>
+                            <h4 class="unselectable" style="white-space: nowrap">Select a Month</h4>
                             <div class="form-group" style="padding-top: 20px; padding-bottom:10px">
                                 <div class="">
-
                                     <select class="" formControlName="month" style="height:35px;width:100%" required id="month">
-                                        <option selected>select...</option>
+                                        <option selected>{{select}}</option>
                                         <option *ngFor="let month1 of Months">{{month1 | titlecase}}</option>
                                     </select>
                                 </div>
-
                             </div>
                         </form>
+
                         <!-- SELECTED TAKES BOTH FORMGROUP VALUES AND CALLS API TO RETRIEVE MONTHLY OVERVIEW DATA. -->
                         <a class="btn btn-outline-primary" (click)="selected()">Select</a>
                     </div>
-
                 </div>
-
             </div>
+
             <!-- IF ANY OF THE TWO UPPER FORM GROUPS ARE EMPTY THIS TEXT WILL APPEAR. -->
             <div class="col" *ngIf="!selecter" style="margin-left:10%; margin-top:5%">
-                <th>
-                    <h3>Please Select A Month And Year</h3>
+                <th class="unselectable">
+                    <h3 class="unselectable">Please Select A Month And Year</h3>
                 </th>
             </div>
         </div>
@@ -51,91 +50,98 @@
 
     <div class="container-xl">
         <div class="CalendarBox" *ngIf="loaded">
+
             <!-- IF DAILY VIEW IS TRUE DISPLAY THIS TABLE SET. -->
             <div *ngIf="!daily">
+
                 <!-- IF A SPECIFIC MONTH AND YEAR HAVE BEEN SELECTED DISPLAY DATA -->
                 <div *ngIf="specific" style="margin-top:.5rem; margin-bottom:1rem">
-
                     <div class="card">
                         <div class="card-body row">
+
                             <!-- CHECKS TO SEE IF FILTER IS USED. DISPLAYS LOCATION UP TOP FOR EASY IDENTIFICATION -->
-                            <div class="col">
-                                <a style="font-size:larger; font-weight:bold"> Listing: {{filterargs === '' ? "none selected" : ""}}{{filterargs}} </a>
+                            <div class="row">
+                                <div class="col-2" style="padding-bottom: 0px">
+                                    <a class="btn btn-outline-primary" (click)="printData1()">Print Report</a>
+                                </div>
+                                <div class="col-8" style="min-width:300px">
+                                    <a style="font-size:larger; font-weight:bold"> Listing: {{filterargs === '' ? "none selected" : ""}}{{filterargs}} </a>
+                                </div>
+
+                                <div class="col-2" style="padding-bottom: 0px">
+                                    <a class="btn btn-outline-primary" (click)="dailyview()">All Listings</a>
+                                </div>
                             </div>
+                            <div id="box" style="height:500px;max-height: 500px; overflow-y:auto;">
 
-                            <div class="col-6" style="padding-bottom: 0px">
-                                <a class="btn btn-outline-primary" (click)="dailyview()" style="margin-left:60%">All Listings</a>
-                            </div>
-
-                            <div id="box" style="height:614px;max-height: 614px; overflow-y:scroll;">
-
-                                <table class="table table-striped table-hover">
-
+                                <table class="table table-striped table-hover" id="printTable1">
                                     <thead class="word-wrap">
-                                        <th class="">Hostaway</th>
+                                        <th class="">CGportfolio</th>
+                                        <th>{{filterargs === '' ? "All Listings" : ""}}{{filterargs}}</th>
                                     </thead>
-
                                     <tbody>
 
                                         <tr class="th1">
-                                            <th class="">{{month}} {{year}}</th>
+                                            <th style="width:17%">{{month}} {{year}}</th>
                                             <th>
                                                 <form [formGroup]="LocFilterForm">
                                                     <div class="form-group row" style="padding: 0px">
                                                         <div class=" col-8"><select class="table-filter" formControlName="name" style="height:35px;width:100%;" required id="name" (change)="filterLocation()">
                                                                 <option selected>select...</option>
                                                                 <option *ngFor="let loc of Locations; let j = index">{{loc}}</option>
-
                                                             </select></div>
                                                         <div class="col">
-                                                            units sold: {{days}} / {{totaldays}}
+                                                            units sold: {{filterargs !== '' ? LocDays +"/"+ totaldays : ShownDay.length +"/"+ Locations.length * totaldays}}
+
                                                         </div>
                                                     </div>
-
                                                 </form>
 
                                             </th>
+                                            <th>Channel</th>
                                             <th>Rooms</th>
                                             <th>OCC</th>
                                             <th>ADR</th>
-                                            <th class="wrapped" (click)="price()">Revenue: ${{total | number :'1.2-2'}} {{SortType === 1 && sortType === "price" ? "▲" : ""}} {{SortType === 2 && sortType === "price" ? "▼" : ""}}</th>
+                                            <th (click)="price()">Revenue{{SortType === 1 && sortType === "price" ? "▲" : ""}}{{SortType === 2 && sortType === "price" ? "▼" : ""}}</th>
                                             <th>REVPAR</th>
 
                                         </tr>
-
                                         <tr class="" *ngFor="let day of ShownDay | myfilter:filterargs; let i = index ">
                                             <th class="divisor">{{day.date}} | {{day.name}}</th>
-                                            <th scope="row">{{day.locationName}}</th>
+                                            <th scope="row">Reservation ID {{day.reservation.reservationId}}</th>
+                                            <th>{{day.reservation.locationName.channel}}</th>
                                             <td>1</td>
                                             <td>100%</td>
                                             <td>${{day.priceForDay/1 | number :'1.2-2'}}</td>
                                             <td>${{day.priceForDay | number :'1.2-2'}} </td>
-
-                                            <td>${{day.priceForDay/days | number :'1.2-2'}}</td>
-
+                                            <td>${{day.priceForDay/1 | number :'1.2-2'}}</td>
                                         </tr>
 
-
                                     </tbody>
-
                                 </table>
 
                             </div>
-                            <div>
-                                <table class="table table-striped table-hover">
+                            <div style="overflow-x:auto">
+                                <table class="table table-striped table-hover" id="printTable3">
                                     <tbody>
                                         <tr>
-                                            <th>yyyy-mm-dd | weekday</th>
-                                            <th style="width:50%">
+                                            <th>Totals</th>
+                                            <th style="width:65%"></th>
 
-
-
-                                            </th>
-                                            <th>AVG: 1</th>
-                                            <th>AVG: 100%</th>
-                                            <th>AVG: ${{RevenueAverage | number :'1.2-2'}} </th>
-                                            <th>AVG: ${{RevenueAverage | number :'1.2-2'}} </th>
-                                            <th>AVG: ${{REVPARAverage | number :'1.2-2'}}
+                                            <th>Rooms</th>
+                                            <th>OCC</th>
+                                            <th>ADR</th>
+                                            <th>Revenue</th>
+                                            <th>RevPAR</th>
+                                        </tr>
+                                        <tr class="wrapped">
+                                            <th></th>
+                                            <th style="width:50%"></th>
+                                            <th class="wrapped">{{LocDays}}</th>
+                                            <th class="wrapped">100%</th>
+                                            <th class="wrapped">${{RevenueAverage | number :'1.2-2'}} </th>
+                                            <th class="wrapped">${{total | number :'1.2-2'}} </th>
+                                            <th class="wrapped">${{total/LocDays | number :'1.2-2'}}
                                             </th>
                                         </tr>
                                     </tbody>
@@ -150,46 +156,40 @@
                 <div *ngIf="specific" style="margin-top:.5rem; margin-bottom:1rem">
                     <div class="card">
                         <div class="card-body">
-
-                            <div style="padding-bottom: 0">
-
-                                <a class="btn btn-outline-primary" (click)="monthly()" style="margin-left:80%">monthly view</a>
-
+                            <div class="row">
+                                <div class="col-10">
+                                    <a class="btn btn-outline-primary" (click)="printData2()">Print Report</a>
+                                </div>
+                                <div class="col">
+                                    <a class="btn btn-outline-primary" (click)="monthly()">Monthly View</a>
+                                </div>
                             </div>
                             <div style="height:650px; max-height: 650px; overflow-y:auto;">
 
-                                <table class="table table-striped table-hover" style="width:100%">
-
+                                <table class="table table-striped table-hover" style="width:100%" id="printTable2">
                                     <thead class="word-wrap">
                                         <th>
-                                            Hostaway
+                                            CGportfolio
                                         </th>
                                     </thead>
+
                                     <tbody>
-
                                         <tr class="th1">
-
                                             <th class="divisor">
                                                 {{month}} {{year}}
                                             </th>
                                             <th class="divisor">Locations <a style="float:right">units sold: {{days}} / {{totaldays}} </a></th>
                                             <th (click)="priceDaily()">Daily Total {{daysUp ? "▼" : ""}} {{daysDow ? "▲" : ""}} ${{total | number :'1.2-2'}}</th>
-
                                         </tr>
-
                                         <tr class="" *ngFor="let l of dayInfo.DailyLocs;let i = index">
                                             <th scope="row" class="divisor">{{dayInfo.DayDates[i]}}</th>
-                                            <td class="wrapped divisor" style="width:65%"><a style="font-weight:bold" *ngFor="let loc of l;let j = index" [id]="'Location'+i+''+j"> {{loc}} | </a></td>
-
+                                            <td class="wrapped divisor" style="width:65%"><a style="font-weight:bold" *ngFor="let loc of l;let j = index" [id]="'Location'+i+''+j">{{loc}}<br></a></td>
                                             <td>${{dayInfo.DayProfit[i] | number: '1.2-2'}} </td>
-
                                         </tr>
                                         <tr style="background-color:lightblue">
                                             <th></th>
                                             <th></th>
                                             <th>Total: ${{total | number :'1.2-2'}}</th>
-
-
                                         </tr>
                                     </tbody>
                                 </table>
@@ -201,6 +201,5 @@
             </div>
         </div>
     </div>
-
 
 </body>

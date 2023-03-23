@@ -19,6 +19,13 @@ tr.sticky {
 th,
 td {
   font-size: medium;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.table thead,
+th {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .th1 {
@@ -35,4 +42,25 @@ tr.fixed.bottom {
 
 tr.fixed.top {
   top: 0;
+}
+*.unselectable {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+::-webkit-scrollbar {
+  width: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #e4e4e4;
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb {
+  height: 15%;
+  background-color: #f9b350;
+  border-radius: 100px;
 }
