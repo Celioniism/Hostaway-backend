@@ -22,10 +22,9 @@ export class OverviewComponent {
   totals: number[] = this.fromDb || {};
   Channel: Map<String, number> = new Map<String, number>();
   MonthCount: number = 0;
-
+  loaded: boolean = false;
   //various options for line and piechart
   public lineChartOptions: ChartConfiguration['options'] = {
-    responsive: true,
     plugins: {
       legend: {
         display: true,
@@ -96,6 +95,7 @@ export class OverviewComponent {
         this.piechartCreate();
         this.calcTotals();
         this.linechartCreate();
+        this.loaded = true;
       },
       (error) => {
         console.log(error);

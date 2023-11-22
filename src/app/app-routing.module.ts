@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { MonthlyComponent } from './pages/monthly/monthly.component';
 import { OverviewComponent } from './pages/overview/overview.component';
+import { PickupsComponent } from './pages/pickups/pickups.component';
 import { UploadComponent } from './pages/upload/upload.component';
 import { YearlyComponent } from './pages/yearly/yearly.component';
 
@@ -80,6 +81,7 @@ const routes: Routes = [
   },
   { path: 'monthly', component: MonthlyComponent, title: 'Monthly Overview' },
   { path: 'yearly', component: YearlyComponent, title: 'Yearly Overview' },
+  { path: 'pickup', component: PickupsComponent, title: 'Pickup Overview' },
   { path: 'upload', component: UploadComponent, title: 'Upload CSV' },
 ];
 

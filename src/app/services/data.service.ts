@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class DataService {
   private baseUrl = 'http://localhost:5000/HostawayApi/';
+  //http://hostaway.us-east-1.elasticbeanstalk.com
+
+  //localhost
   constructor(private _http: HttpClient) {}
 
   getOverview(): Observable<any> {
@@ -18,5 +21,9 @@ export class DataService {
 
   getMonthly(month: string, year: string): Observable<any> {
     return this._http.get(this.baseUrl + 'getMonthly/' + year + '/' + month);
+  }
+
+  getPickup(): Observable<any> {
+    return this._http.get(this.baseUrl + 'getPickup');
   }
 }
